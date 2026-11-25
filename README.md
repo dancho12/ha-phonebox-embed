@@ -128,13 +128,17 @@ Without kiosk-mode the header takes the top of the widget and 6 rows no longer f
 
 ### 7. The PhoneBox widget
 
+The Home Assistant dashboard widget is new: until it is in a PhoneBox release, only a build from source has it.
+
 1. **PhoneBox › Settings › General › Home Assistant**: the address and a long-lived access token, if they are not
    there yet. The token stays on the computer: it lists the dashboards in Settings and is never sent to the phone.
 2. Add the **Home Assistant dashboard** widget to a page, usually the whole page (12 × 6).
-3. **Dashboard and view**: pick one from the list, for example `phonebox-panel/home`.
-4. **Address from the phone**: leave it empty when the phone reaches Home Assistant at the same address as the
-   computer. When Settings has `localhost` or `homeassistant.local` (Android often cannot resolve `.local` names),
-   enter the IP address, for example `http://192.168.1.10:8123`.
+3. **Dashboard and view**: pick one from the list, for example "PhoneBox › Home (phonebox-panel/home)". Under the
+   list, **The phone opens: …** shows the exact address.
+4. **Home Assistant address for the phone**: usually leave it empty. PhoneBox already sends a `homeassistant.local`
+   name (Android often cannot find those) to the phone as its IP address. Fill it in only when Settings has
+   `localhost` (Home Assistant on the same computer): then enter the computer's address on the network, for example
+   `http://192.168.1.10:8123`.
 5. Save.
 
 ## Troubleshooting
@@ -143,7 +147,7 @@ Without kiosk-mode the header takes the top of the widget and 6 rows no longer f
 |---|---|
 | An empty widget | Step 3: `use_x_frame_options: false`, restart Home Assistant |
 | Home Assistant's sign-in page | Step 2: the phone's address in `trusted_networks` and the user's id, or sign in once in the widget |
-| "Home Assistant does not answer" | Address from the phone (step 7.4): an IP address instead of `.local`, the phone on the same network |
+| "Home Assistant does not answer" | Check the "The phone opens" line (step 7.3) and that the phone is on the same network; if needed, set the address for the phone (step 7.4) |
 | The usual grid, no transparent background | The module is not loaded: check the resource (step 4) and reload with a cache refresh. The browser console shows a `PHONEBOX-EMBED` line when it is |
 | The grid, but rows do not fill the height | Home Assistant's header is showing: step 6 (kiosk-mode) |
 | No pictures (album art, photos) over `http` | Use a PhoneBox version that has the Home Assistant dashboard widget: its panel does not block `http` pictures |

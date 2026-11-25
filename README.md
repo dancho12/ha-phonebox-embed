@@ -48,6 +48,9 @@ The phone should sign in by itself. For that, Home Assistant trusts the phone's 
    ```
 
 4. Restart Home Assistant.
+5. In PhoneBox, give Home Assistant by its **IPv4 address** (`http://192.168.1.10:8123`), not as
+   `homeassistant.local`. By name the phone often connects over IPv6, its IPv6 addresses change, and
+   `trusted_networks` does not recognize it: you get the password page instead.
 
 If you'd rather not trust an address, sign in once inside the widget on the phone; Home Assistant remembers it.
 
@@ -146,7 +149,7 @@ The Home Assistant dashboard widget is new: until it is in a PhoneBox release, o
 | What you see | What to do |
 |---|---|
 | An empty widget | Step 3: `use_x_frame_options: false`, restart Home Assistant |
-| Home Assistant's sign-in page | Step 2: the phone's address in `trusted_networks` and the user's id, or sign in once in the widget |
+| Home Assistant's sign-in page | Step 2: the phone's address in `trusted_networks` and the user's id; Home Assistant by IPv4 in PhoneBox, not `homeassistant.local` (step 2.5); or sign in once in the widget |
 | "Home Assistant does not answer" | Check the "The phone opens" line (step 7.3) and that the phone is on the same network; if needed, set the address for the phone (step 7.4) |
 | The usual grid, no transparent background | The module is not loaded: check the resource (step 4) and reload with a cache refresh. The browser console shows a `PHONEBOX-EMBED` line when it is |
 | The grid, but rows do not fill the height | Home Assistant's header is showing: step 6 (kiosk-mode) |

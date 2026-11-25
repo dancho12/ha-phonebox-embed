@@ -135,8 +135,8 @@ The Home Assistant dashboard widget is new: until it is in a PhoneBox release, o
 2. Add the **Home Assistant dashboard** widget to a page, usually the whole page (12 × 6).
 3. **Dashboard and view**: pick one from the list, for example "PhoneBox › Home (phonebox-panel/home)". Under the
    list, **The phone opens: …** shows the exact address.
-4. **Home Assistant address for the phone**: usually leave it empty. PhoneBox already sends a `homeassistant.local`
-   name (Android often cannot find those) to the phone as its IP address. Fill it in only when Settings has
+4. **Home Assistant address for the phone**: usually leave it empty. With a name such as `homeassistant.local`, the
+   phone tries the name first, then the IP addresses the computer found for it, and uses the first that answers. Fill it in only when Settings has
    `localhost` (Home Assistant on the same computer): then enter the computer's address on the network, for example
    `http://192.168.1.10:8123`.
 5. Save.

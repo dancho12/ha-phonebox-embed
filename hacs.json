@@ -1,0 +1,6 @@
+{
+  "name": "PhoneBox embed",
+  "filename": "ha-phonebox-embed.js",
+  "render_readme": true,
+  "homeassistant": "2024.8.0"
+}

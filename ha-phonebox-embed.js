@@ -19,7 +19,7 @@
  * Other dashboards, and the same dashboard opened directly, are left alone (apart from the grid columns).
  */
 
-const VERSION = "1.0.2";
+const VERSION = "1.0.3";
 const ATTR = "data-phonebox-embed";
 const DEFAULTS = { columns: 12, rows: 6 };
 

@@ -19,7 +19,7 @@
  * Other dashboards, and the same dashboard opened directly, are left alone (apart from the grid columns).
  */
 
-const VERSION = "1.0.0";
+const VERSION = "1.0.2";
 const ATTR = "data-phonebox-embed";
 const DEFAULTS = { columns: 12, rows: 6 };
 
@@ -62,6 +62,10 @@ function stylesFor({ columns, rows }) {
     // as the view has `columns` of them, whatever number of columns the view shows.
     "hui-grid-section": `:host { --base-column-count: calc(${columns} / var(--column-count, 1)) !important; }`,
   };
+  // On the computer as wide as two section columns of Home Assistant (about 1000px): one column is at most 500px wide,
+  // which squeezes a dashboard made for a wide panel, and the whole window is too wide. Inside the frame it fills the
+  // frame, with no margins.
+  styles["hui-sections-view"] = `.wrapper { max-width: calc(2 * var(--column-max-width, 500px) + var(--column-gap, 32px)) !important; }`;
   if (!FRAMED) return styles;
   // Rows: the frame height (100vh inside a frame) split into `rows` rows and the gaps between them.
   styles.document = `

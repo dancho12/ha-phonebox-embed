@@ -3,169 +3,92 @@
 **English** · [Русский](README.ru.md)
 
 A dashboard module that fits a Home Assistant dashboard into the **Home Assistant dashboard** widget of
-[PhoneBox](https://github.com/ersinkoc/phonebox) (a desk panel on an old phone), or into any other app that shows
-Home Assistant in a frame.
+[PhoneBox](https://github.com/ersinkoc/phonebox), a desk panel on an old phone.
+
+![A Home Assistant dashboard on the PhoneBox panel](docs/panel.png)
 
 On a dashboard where it is turned on:
 
-- **The PhoneBox grid.** Cards are laid out on a 12 × 6 grid over the whole widget. A 6 × 2 card is exactly half the
-  width and a third of the height, so there is no size fiddling. The columns apply in the editor on your computer
-  too, so the sizes you pick there are the ones the panel shows.
-- **No background of its own.** The page is transparent and the PhoneBox background shows through. Any theme works.
-- **No outer padding.** The PhoneBox card already has its own.
+- **The panel's grid.** Cards are laid out on a 12 × 6 grid over the whole widget: a 6 × 2 card is exactly half the
+  width and a third of the height. The editor on your computer uses the same grid, so the sizes you pick there are
+  the ones the panel shows.
+- **No background and no padding of its own** on the panel: the PhoneBox background shows through. Any theme works.
 
-The background, padding and row height change only while the dashboard is shown inside a frame. The same dashboard
-in a browser or in the Companion app looks as usual.
+On your computer the dashboard keeps its header and background; only the panel shows it this way.
 
-## Setup, step by step
+## Setup
 
-### 1. A user for the panel
+### 1. Install
 
-The panel signs in to Home Assistant as a user, so give it one of its own, without administrator rights.
+- **Home Assistant 2026.11 and later:** **Settings › Marketplace**, search for **PhoneBox embed** and install it. If
+  it is not in the catalog yet: **⋮ › Add from link**, `https://github.com/dancho12/ha-phonebox-embed`, type
+  **Dashboard** (this needs a GitHub account connected to the Marketplace).
+- **Older versions:** the same through HACS (**⋮ › Custom repositories** for the link).
 
-**Settings › People › Users › Add user**, for example "Panel". Turn on **Can only log in from the local network**;
-leave **Administrator** off.
+Install [kiosk-mode](https://github.com/NemesisRE/kiosk-mode) the same way: PhoneBox uses it to hide Home Assistant's
+header and sidebar on the panel. Then reload the page with Ctrl+Shift+R.
 
-### 2. Sign in without a password
+### 2. Let Home Assistant be shown in an app
 
-The phone should sign in by itself. For that, Home Assistant trusts the phone's address.
-
-1. Give the phone a fixed address in your router (a DHCP reservation), for example `192.168.1.50`.
-2. Find the user's id: turn on **Advanced mode** in your profile, then **Settings › People › Users** › "Panel".
-   The dialog shows the id.
-3. Add to `configuration.yaml`:
-
-   ```yaml
-   homeassistant:
-     auth_providers:
-       - type: trusted_networks
-         trusted_networks:
-           - 192.168.1.50/32           # the phone only
-         trusted_users:
-           192.168.1.50: abcdef0123456789   # the "Panel" user's id
-         allow_bypass_login: true
-       - type: homeassistant           # the usual password sign-in for everyone else; keep it
-   ```
-
-4. Restart Home Assistant.
-5. In PhoneBox, give Home Assistant by its **IPv4 address** (`http://192.168.1.10:8123`), not as
-   `homeassistant.local`. By name the phone often connects over IPv6, its IPv6 addresses change, and
-   `trusted_networks` does not recognize it: you get the password page instead.
-
-If you'd rather not trust an address, sign in once inside the widget on the phone; Home Assistant remembers it.
-
-### 3. Allow Home Assistant in a frame
-
-By default Home Assistant refuses to be shown inside another app (the `X-Frame-Options` header). Add to
-`configuration.yaml` and restart:
+Add to `configuration.yaml` and restart Home Assistant:
 
 ```yaml
 http:
   use_x_frame_options: false
 ```
 
-This lets other pages embed Home Assistant. Keep that in mind if your Home Assistant is reachable from the internet;
-on a home network only, it does not matter.
+Without it Home Assistant refuses to be shown inside another app, and the widget stays empty.
 
-### 4. Install the module
+### 3. A dashboard for the panel
 
-**Home Assistant 2026.11 and later (Marketplace):**
-
-1. **Settings › Marketplace › ⋮ › Add from link**: `https://github.com/dancho12/ha-phonebox-embed`, type
-   **Dashboard**. The Marketplace needs a connected GitHub account for this.
-2. Find **PhoneBox embed** and install it. The dashboard resource is added for you.
-
-**Before 2026.11 (HACS):** **HACS › ⋮ › Custom repositories**, the same link, type **Dashboard**; then install
-**PhoneBox embed**.
-
-**By hand:** put `ha-phonebox-embed.js` in `/config/www/` and add a resource in **Settings › Dashboards › ⋮ ›
-Resources › Add resource**: URL `/local/ha-phonebox-embed.js?v=1.0.2`, type **JavaScript module**. Change `?v=` when
-you update the file.
-
-Then reload the page with a cache refresh (Ctrl+Shift+R).
-
-### 5. A dashboard for the panel
-
-1. **Settings › Dashboards › Add dashboard › New dashboard from scratch**, for example "PhoneBox" (URL
-   `phonebox-panel`).
-2. Open it and press the pencil. Keep the view type **Sections**. In the view's settings, set **Max number of
-   sections wide** to **1** and make one section. Put your cards in it.
-3. **⋮ › Raw configuration editor** and add at the top level, next to `views:`:
-
-   ```yaml
-   phonebox:
-     columns: 12   # columns across the full width, as in PhoneBox
-     rows: 6       # rows over the full height of the widget
-   ```
-
-   A view can have numbers of its own:
+1. **Settings › Dashboards › Add dashboard › New dashboard from scratch**, for example "PhoneBox".
+2. Press the pencil, then the pencil next to the view's name: type **Sections**, **Max number of section columns**
+   **1**. Keep one section and put your cards in it.
+3. **⋮ › Raw configuration editor**, and at the very end, at the top level:
 
    ```yaml
    phonebox:
      columns: 12
      rows: 6
-     views:
-       climate: { rows: 4 }   # the view's path or its index
    ```
 
-4. Save. A card's size (**Layout** in its settings) is now in panel cells, 12 columns by 6 rows: 6 × 2 is half the
-   width and a third of the height.
+4. Size each card on the **Layout** tab of its settings, in panel cells. For example a media player 6 × 2,
+   two sensors 3 × 2, lights 6 × 2: three such rows fill the panel.
 
-Keep it to **one section column** and one section per view. With a section wider than one column, Home Assistant's
-editor counts its own grid (12 per column, so 24 for two) while the panel shows `columns`, and sizing cards in the
-editor goes wrong. On the computer the module widens the view to about two section columns, so it looks like the panel.
+![Card size in the editor: 6 of 12 columns, 2 of 6 rows](docs/editor.png)
 
-### 6. Hide the header and sidebar (kiosk-mode)
+Keep **one section column** and one section per view. With wider sections Home Assistant's editor counts its own grid
+(24 columns for two) while the panel shows 12, and sizes in the editor go wrong. A view can have numbers of its own:
+`views: { climate: { rows: 4 } }` under `phonebox:` (the view's path or index).
 
-To show the panel without Home Assistant's header and sidebar, install
-[kiosk-mode](https://github.com/NemesisRE/kiosk-mode) (from the Marketplace or HACS) and add to the dashboard's YAML:
+### 4. PhoneBox
 
-```yaml
-kiosk_mode:
-  user_settings:
-    - users: ["Panel"]   # the user from step 1
-      kiosk: true
-```
+1. **Settings › General › Home Assistant**: the address and a long-lived access token (in Home Assistant: your
+   profile › **Security**). The phone signs in with this token, the way Home Assistant's own app does: no password on
+   the phone, no trusted networks.
+2. Add the **Home Assistant dashboard** widget to a page (usually the whole page) and pick the dashboard in its
+   settings. Under the list, **The phone opens** shows the exact address.
 
-Only the panel's user then gets the kiosk view; on your computer the dashboard keeps its header and stays editable.
-Without kiosk-mode the header takes the top of the widget and 6 rows no longer fit.
+![The widget's settings in PhoneBox](docs/widget-settings.png)
 
-### 7. The PhoneBox widget
-
-The Home Assistant dashboard widget is new: until it is in a PhoneBox release, only a build from source has it.
-
-1. **PhoneBox › Settings › General › Home Assistant**: the address and a long-lived access token, if they are not
-   there yet. The token stays on the computer: it lists the dashboards in Settings and is never sent to the phone.
-2. Add the **Home Assistant dashboard** widget to a page, usually the whole page (12 × 6).
-3. **Dashboard and view**: pick one from the list, for example "PhoneBox › Home (phonebox-panel/home)". Under the
-   list, **The phone opens: …** shows the exact address.
-4. **Home Assistant address for the phone**: usually leave it empty. With a name such as `homeassistant.local`, the
-   phone tries the name first, then the IP addresses the computer found for it, and uses the first that answers. Fill it in only when Settings has
-   `localhost` (Home Assistant on the same computer): then enter the computer's address on the network, for example
-   `http://192.168.1.10:8123`.
-5. Save.
+The dashboard then runs as the token's user. For a panel others can reach, make a Home Assistant user without
+administrator rights, choose **Sign-in › Home Assistant's own sign-in** in the widget and sign in once on the phone.
 
 ## Troubleshooting
 
 | What you see | What to do |
 |---|---|
-| An empty widget | Step 3: `use_x_frame_options: false`, restart Home Assistant |
-| Home Assistant's sign-in page | Step 2: the phone's address in `trusted_networks` and the user's id; Home Assistant by IPv4 in PhoneBox, not `homeassistant.local` (step 2.5); or sign in once in the widget |
-| "Home Assistant does not answer" | Check the "The phone opens" line (step 7.3) and that the phone is on the same network; if needed, set the address for the phone (step 7.4) |
-| The usual grid, no transparent background | The module is not loaded: check the resource (step 4) and reload with a cache refresh. The browser console shows a `PHONEBOX-EMBED` line when it is |
-| The grid, but rows do not fill the height | Home Assistant's header is showing: step 6 (kiosk-mode) |
-| No pictures (album art, photos) over `http` | Use a PhoneBox version that has the Home Assistant dashboard widget: its panel does not block `http` pictures |
+| An empty widget | Step 2, then restart Home Assistant |
+| Home Assistant's sign-in page | The token in PhoneBox › Settings › General, and **Sign-in: With the token** in the widget |
+| "Home Assistant does not answer" | Check **The phone opens** in the widget's settings and that the phone is on the same network |
+| The usual grid, a background, a header | The module or kiosk-mode is not loaded: reload Home Assistant with Ctrl+Shift+R. The browser console shows a `PHONEBOX-EMBED` line when the module is there |
+| Card sizes in the editor do not match the panel | Step 3.2: one section column, a section one column wide |
 
 ## How it works
 
-The module computes nothing in JavaScript; it only sets Home Assistant's own CSS variables:
-
-- `--base-column-count` in a section's grid: `columns / the view's column count`, so a section as wide as the view
-  gets `columns` cells;
-- `--ha-section-grid-row-height`: `(100vh − the gaps) / rows` (inside a frame, `100vh` is the widget's height);
-- transparency: the backgrounds of the page, the panel and the view.
-
-The styles go into the shadow DOM of Home Assistant's components, so the module finds them on the page and keeps
-them in place while such a dashboard is open. Other dashboards are left alone.
+The module computes nothing in JavaScript; it only sets Home Assistant's own CSS variables: the section grid's column
+count (`--base-column-count`), the row height inside the frame (`(100vh − gaps) / rows`), and transparent backgrounds
+of the page and the view. The styles go into the shadow DOM of Home Assistant's components while such a dashboard is
+open; other dashboards are left alone.
 
 MIT license.

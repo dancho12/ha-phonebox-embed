@@ -79,7 +79,7 @@ on a home network only, it does not matter.
 **PhoneBox embed**.
 
 **By hand:** put `ha-phonebox-embed.js` in `/config/www/` and add a resource in **Settings › Dashboards › ⋮ ›
-Resources › Add resource**: URL `/local/ha-phonebox-embed.js?v=1.0.0`, type **JavaScript module**. Change `?v=` when
+Resources › Add resource**: URL `/local/ha-phonebox-embed.js?v=1.0.2`, type **JavaScript module**. Change `?v=` when
 you update the file.
 
 Then reload the page with a cache refresh (Ctrl+Shift+R).
@@ -111,8 +111,9 @@ Then reload the page with a cache refresh (Ctrl+Shift+R).
 4. Save. A card's size (**Layout** in its settings) is now in panel cells, 12 columns by 6 rows: 6 × 2 is half the
    width and a third of the height.
 
-More section columns, and sections wider than one, work too: the module takes the grid from the view's full width.
-One column is the simplest: what the editor shows is what the panel shows.
+Keep it to **one section column** and one section per view. With a section wider than one column, Home Assistant's
+editor counts its own grid (12 per column, so 24 for two) while the panel shows `columns`, and sizing cards in the
+editor goes wrong. On the computer the module widens the view to about two section columns, so it looks like the panel.
 
 ### 6. Hide the header and sidebar (kiosk-mode)
 

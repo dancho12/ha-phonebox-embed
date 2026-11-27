@@ -20,10 +20,8 @@ On your computer the dashboard keeps its header and background; only the panel s
 
 ### 1. Install
 
-- **Home Assistant 2026.11 and later:** **Settings › Marketplace**, search for **PhoneBox embed** and install it. If
-  it is not in the catalog yet: **⋮ › Add from link**, `https://github.com/dancho12/ha-phonebox-embed`, type
-  **Dashboard** (this needs a GitHub account connected to the Marketplace).
-- **Older versions:** the same through HACS (**⋮ › Custom repositories** for the link).
+In **Settings › Marketplace** (HACS on Home Assistant 2026.10 and older), search for **PhoneBox embed** and install
+it.
 
 Install [kiosk-mode](https://github.com/NemesisRE/kiosk-mode) the same way: PhoneBox uses it to hide Home Assistant's
 header and sidebar on the panel. Then reload the page with Ctrl+Shift+R.

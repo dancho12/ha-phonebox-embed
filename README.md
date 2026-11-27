@@ -62,22 +62,24 @@ Keep **one section column** and one section per view. With wider sections Home A
 ### 4. PhoneBox
 
 1. **Settings › General › Home Assistant**: the address and a long-lived access token (in Home Assistant: your
-   profile › **Security**). The phone signs in with this token, the way Home Assistant's own app does: no password on
-   the phone, no trusted networks.
+   profile › **Security**). The token stays on the computer: PhoneBox uses it only to list the dashboards.
 2. Add the **Home Assistant dashboard** widget to a page (usually the whole page) and pick the dashboard in its
    settings. Under the list, **The phone opens** shows the exact address.
 
 ![The widget's settings in PhoneBox](docs/widget-settings.png)
 
-The dashboard then runs as the token's user. For a panel others can reach, make a Home Assistant user without
-administrator rights, choose **Sign-in › Home Assistant's own sign-in** in the widget and sign in once on the phone.
+3. Sign in to Home Assistant once on the phone, in the widget; Home Assistant keeps the phone signed in. Best with a
+   Home Assistant user of its own for the panel, without administrator rights. If typing is easier in portrait,
+   switch the orientation in PhoneBox's **Settings › Screen**. With
+   [trusted networks](https://www.home-assistant.io/docs/authentication/providers/#trusted-networks) the phone needs
+   no password at all.
 
 ## Troubleshooting
 
 | What you see | What to do |
 |---|---|
 | An empty widget | Step 2, then restart Home Assistant |
-| Home Assistant's sign-in page | The token in PhoneBox › Settings › General, and **Sign-in: With the token** in the widget |
+| Home Assistant's sign-in page every time | Sign in in the widget once; if it comes back, the phone's storage was cleared or the user's sessions were removed in Home Assistant |
 | "Home Assistant does not answer" | Check **The phone opens** in the widget's settings and that the phone is on the same network |
 | The usual grid, a background, a header | The module or kiosk-mode is not loaded: reload Home Assistant with Ctrl+Shift+R. The browser console shows a `PHONEBOX-EMBED` line when the module is there |
 | Card sizes in the editor do not match the panel | Step 3.2: one section column, a section one column wide |
